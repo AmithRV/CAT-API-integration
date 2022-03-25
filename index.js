@@ -1,18 +1,17 @@
 class Search {
-    constructor() {
-        this.loadImage = function (url) {
-            console.log(url)
-            fetch(url)
-                .then(response => response.json())
-                .then(commits => {
-                    console.log('response header : ', commits)
-                    commits.map(
-                        (e) => {
-                            let image = document.getElementById(`img${i}`);
-                            image.src = `${e.url}`;
-                        })
-                });
-        }
+    constructor(url) {
+        console.log(url);
+        fetch(url)
+            .then(response => response.json())
+            .then(commits => {
+                console.log('response header : ', commits)
+                commits.map(
+                    (e) => {
+                        let image = document.getElementById(`img${i}`);
+                        image.src = `${e.url}`;
+                    })
+            });
+
         console.log('Search...')
     }
 }
@@ -54,7 +53,7 @@ let defaultLoader = function () {
     new CategorySelector();
 
     let loader = function (event) {
-        let search = new Search();
+        //let search = new Search();
 
         let categorySelector = document.getElementById('categorySelector');
         let breedSelector = document.getElementById('breedSelector');
@@ -87,12 +86,11 @@ let defaultLoader = function () {
                 breed = ' ';
             }
             //console.log(`category : ${category}, breed:${breed},  type : ${type}, order: ${order}, limit : ${limit}`);
-            search.loadImage(`https://api.thecatapi.com/v1/images/search?limit=9&&order=${order}&mime_types=${type}&category_ids=${category}&breed_ids=${breed}`);
-
+            new Search(`https://api.thecatapi.com/v1/images/search?limit=9&&order=${order}&mime_types=${type}&category_ids=${category}&breed_ids=${breed}`);
         } catch (error) {
             console.log('error : ', error);
         }
-
+        url
     };
 
     (function () {
