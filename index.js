@@ -2,17 +2,24 @@ class Search {
     constructor(url) {
         console.log(url);
         fetch(url)
-            .then(response => response.json())
+            .then(response => { return response.json() })
             .then(commits => {
-                console.log('response header : ', commits)
+                const list = document.getElementById("imageCollection");
+                while (list.hasChildNodes()) {
+                    list.removeChild(list.firstChild);
+                }
+
+                console.log(' commits : ', commits)
                 commits.map(
                     (e) => {
-                        let image = document.getElementById(`img${i}`);
-                        image.src = `${e.url}`;
+                        const image = document.createElement("img");
+                        image.src = e.url;
+                        let cover = document.createElement("div");
+                        cover.className = 'image_container'
+                        cover.append(image);
+                        document.getElementById('imageCollection').append(cover)
                     })
             });
-
-        console.log('Search...')
     }
 }
 
@@ -65,9 +72,9 @@ let defaultLoader = function () {
         let breed = breedSelector.options[breedSelector.selectedIndex].value;
         let type = typeSelector.options[typeSelector.selectedIndex].value;
         let order = orderSelector.options[orderSelector.selectedIndex].value;
-        let limit = limitSelector.options[orderSelector.selectedIndex].value;
+        let limit = limitSelector.options[limitSelector.selectedIndex].value;
 
-        console.log(`category : ${category}, breed:${breed},  type : ${type}, order: ${order}, limit : ${limit}`);
+        //console.log(`category : ${category}, breed:${breed},  type : ${type}, order: ${order}, limit : ${limit}`);
 
         try {
             if (order === 'null') {
@@ -80,17 +87,17 @@ let defaultLoader = function () {
                 limit = 9;
             }
             if (category == "none") {
-                category = ' ';
+                category = '';
             }
             if (breed == "none") {
                 breed = ' ';
             }
+
             //console.log(`category : ${category}, breed:${breed},  type : ${type}, order: ${order}, limit : ${limit}`);
-            new Search(`https://api.thecatapi.com/v1/images/search?limit=9&&order=${order}&mime_types=${type}&category_ids=${category}&breed_ids=${breed}`);
+            new Search(`https://api.thecatapi.com/v1/images/search?limit=${limit}&&order=${order}&mime_types=${type}&category_ids=${category}&breed_ids=${breed}`);
         } catch (error) {
             console.log('error : ', error);
         }
-        url
     };
 
     (function () {
@@ -105,7 +112,7 @@ let defaultLoader = function () {
                         const image = document.createElement("img");
                         image.src = e.url;
                         let cover = document.createElement("div");
-                        cover.className = 'image_container'
+                        cover.className = 'image_container';
                         cover.append(image);
                         document.getElementById('imageCollection').append(cover)
                     })
